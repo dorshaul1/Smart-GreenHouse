@@ -20,21 +20,49 @@ let dhtChart, lightChart;
 function chartOptions() {
   return {
     responsive: true,
+    maintainAspectRatio: false,
     interaction: { mode: "nearest", intersect: false },
     scales: {
-      x: { type: "time", time: { unit: "minute" } },
-      y: { beginAtZero: false },
+      x: {
+        type: "time",
+        time: { unit: "minute", tooltipFormat: "HH:mm" },
+        ticks: { color: "#c7d2fe" },
+        grid: { color: "rgba(255,255,255,0.08)" },
+      },
+      y: {
+        beginAtZero: false,
+        ticks: { color: "#c7d2fe" },
+        grid: { color: "rgba(255,255,255,0.08)" },
+      },
+    },
+    elements: {
+      line: { tension: 0.35, borderWidth: 2 },
+      point: { radius: 0, hitRadius: 6, hoverRadius: 4 },
     },
     plugins: {
-      legend: { labels: { color: "#eef2ff" } },
+      legend: {
+        labels: { color: "#eef2ff", boxWidth: 10, usePointStyle: true },
+      },
+      tooltip: {
+        mode: "index",
+        intersect: false,
+        callbacks: {
+          title: (items) =>
+            items[0] ? new Date(items[0].parsed.x).toLocaleTimeString() : "",
+        },
+      },
     },
   };
+}
+
+function dataset(label, data) {
+  return { label, data, fill: false };
 }
 
 function makeLineChart(canvas, datasets = []) {
   return new Chart(canvas, {
     type: "line",
-    data: { datasets },
+    data: { datasets: datasets.map((d) => dataset(d.label, d.data)) },
     options: chartOptions(),
   });
 }

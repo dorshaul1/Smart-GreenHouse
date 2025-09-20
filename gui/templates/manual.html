@@ -5,220 +5,146 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Manual Data Console</title>
     <link rel="stylesheet" href="/static/style.css" />
-    <style>
-      .wrap {
-        display: grid;
-        gap: 1rem;
-      }
-      .grid {
-        display: grid;
-        gap: 12px;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      }
-      .stack {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-      }
-      .row {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-        flex-wrap: wrap;
-      }
-
-      .field {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-      }
-      label {
-        font-weight: 600;
-        opacity: 0.9;
-      }
-
-      input[type="number"],
-      input[type="text"],
-      select {
-        padding: 10px 12px;
-        border-radius: 10px;
-        border: 1px solid rgba(255, 255, 255, 0.16);
-        background: rgba(255, 255, 255, 0.05);
-        color: #eef2ff;
-        width: 100%;
-      }
-
-      button {
-        padding: 10px 14px;
-        border-radius: 10px;
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        background: rgba(110, 168, 254, 0.2);
-        color: #eef2ff;
-        cursor: pointer;
-        font-weight: 700;
-        letter-spacing: 0.2px;
-      }
-      button:hover {
-        filter: brightness(1.08);
-      }
-
-      .ok {
-        color: var(--ok);
-      }
-      .warn {
-        color: var(--warn);
-      }
-      .alarm {
-        color: var(--alarm);
-      }
-      .muted {
-        color: var(--muted);
-      }
-
-      header .head {
-        display: flex;
-        align-items: baseline;
-        justify-content: space-between;
-        gap: 1rem;
-      }
-      header .head a {
-        color: var(--accent);
-        text-decoration: none;
-        font-weight: 600;
-      }
-    </style>
   </head>
-  <body>
-    <header class="card small">
-      <div class="head">
-        <div>
-          <h1 style="margin: 0">Manual Data Console</h1>
-          <p class="muted" style="margin: 0.25rem 0 0">
-            Send test readings & actuator commands
-          </p>
-        </div>
-        <a href="\/">← Back to Dashboard</a>
+  <body class="ui light">
+    <header class="topbar">
+      <div class="brand">
+        <div class="dot"></div>
+        <strong>Smart Greenhouse</strong>
+        <span class="divider">/</span>
+        <span class="sub">Manual Console</span>
       </div>
+      <nav class="actions">
+        <a class="link" href="/">← Back to Dashboard</a>
+      </nav>
     </header>
 
-    <main class="wrap">
-      <!-- Sensors -->
-      <section class="card">
-        <div class="row" style="justify-content: space-between">
-          <h2 style="margin: 0">Send Sensor Readings</h2>
-          <span class="muted">manual publish</span>
-        </div>
-
-        <div class="grid">
-          <!-- DHT -->
-          <article class="card">
-            <h3 style="margin-top: 0">DHT (Temperature &amp; Humidity)</h3>
-            <div class="stack">
-              <div class="field">
-                <label for="temp">Temperature (°C)</label>
-                <input
-                  id="temp"
-                  type="number"
-                  step="0.1"
-                  placeholder="e.g. 33.5"
-                  aria-label="Temperature in Celsius"
-                />
-              </div>
-              <div class="field">
-                <label for="hum">Humidity (%)</label>
-                <input
-                  id="hum"
-                  type="number"
-                  step="0.1"
-                  placeholder="e.g. 24"
-                  aria-label="Humidity percent"
-                />
-              </div>
-              <div class="row">
-                <button onclick="sendDHT()" aria-label="Send DHT reading">
-                  Send DHT
-                </button>
-                <span id="dhtStatus" class="muted" aria-live="polite"></span>
-              </div>
-            </div>
-          </article>
-
-          <!-- Light -->
-          <article class="card">
-            <h3 style="margin-top: 0">Light (Lux)</h3>
-            <div class="stack">
-              <div class="field">
-                <label for="lux">Lux</label>
-                <input
-                  id="lux"
-                  type="number"
-                  step="1"
-                  placeholder="e.g. 400"
-                  aria-label="Light in lux"
-                />
-              </div>
-              <div class="row">
-                <button onclick="sendLight()" aria-label="Send Light reading">
-                  Send Light
-                </button>
-                <span id="lightStatus" class="muted" aria-live="polite"></span>
-              </div>
-            </div>
-          </article>
-        </div>
+    <main class="container">
+      <!-- Intro -->
+      <section class="panel panel--intro">
+        <h1 class="h1">Send Test Readings & Commands</h1>
+        <p class="muted">
+          Use this page to publish emulated sensor values and trigger actuator
+          actions.
+        </p>
       </section>
 
-      <!-- Actuators -->
-      <section class="card">
-        <div class="row" style="justify-content: space-between">
-          <h2 style="margin: 0">Actuators</h2>
-          <span class="muted">controls</span>
-        </div>
+      <div class="grid-2">
+        <!-- Sensors -->
+        <section class="panel">
+          <header class="panel__head">
+            <h2 class="h2">Sensors</h2>
+            <span class="badge">manual publish</span>
+          </header>
 
-        <div class="grid">
-          <!-- Emergency -->
-          <article class="card">
-            <h3 style="margin-top: 0">Emergency Button</h3>
-            <div class="row">
-              <button onclick="sendEmergency()" aria-label="Trigger emergency">
-                Trigger Emergency
-              </button>
-              <span id="btnStatus" class="alarm" aria-live="polite"></span>
-            </div>
-          </article>
+          <div class="stack-16">
+            <article class="card">
+              <h3 class="h3">DHT • Temperature & Humidity</h3>
+              <div class="form-grid">
+                <label class="field">
+                  <span>Temperature (°C)</span>
+                  <input
+                    id="temp"
+                    type="number"
+                    step="0.1"
+                    placeholder="e.g. 33.5"
+                  />
+                </label>
+                <label class="field">
+                  <span>Humidity (%)</span>
+                  <input
+                    id="hum"
+                    type="number"
+                    step="0.1"
+                    placeholder="e.g. 24"
+                  />
+                </label>
+                <div class="row">
+                  <button class="btn btn--primary" onclick="sendDHT()">
+                    Send DHT
+                  </button>
+                  <span id="dhtStatus" class="status"></span>
+                </div>
+              </div>
+            </article>
 
-          <!-- Knob -->
-          <article class="card">
-            <h3 style="margin-top: 0">Adjust Thresholds (Knob)</h3>
-            <div class="stack">
-              <div class="field">
-                <label for="target">Target</label>
-                <select id="target" aria-label="Threshold target">
-                  <option value="temperature">Temperature (TEMP_MAX)</option>
-                  <option value="humidity">Humidity (HUM_MIN)</option>
-                </select>
+            <article class="card">
+              <h3 class="h3">Light • Lux</h3>
+              <div class="form-grid">
+                <label class="field">
+                  <span>Lux</span>
+                  <input
+                    id="lux"
+                    type="number"
+                    step="1"
+                    placeholder="e.g. 400"
+                  />
+                </label>
+                <div class="row">
+                  <button class="btn btn--primary" onclick="sendLight()">
+                    Send Light
+                  </button>
+                </div>
+                <span id="lightStatus" class="status"></span>
               </div>
-              <div class="field">
-                <label for="tval">Value</label>
-                <input
-                  id="tval"
-                  type="number"
-                  step="0.1"
-                  placeholder="e.g. 32"
-                  aria-label="Threshold value"
-                />
-              </div>
+            </article>
+          </div>
+        </section>
+
+        <!-- Actuators -->
+        <section class="panel">
+          <header class="panel__head">
+            <h2 class="h2">Actuators</h2>
+            <span class="badge badge--neutral">controls</span>
+          </header>
+
+          <div class="stack-16">
+            <article class="card card--warn">
+              <h3 class="h3">Emergency</h3>
+              <p class="muted">Instantly disable relays.</p>
               <div class="row">
-                <button onclick="sendKnob()" aria-label="Set threshold">
-                  Set Threshold
+                <button class="btn btn--danger" onclick="sendEmergency()">
+                  Trigger Emergency
                 </button>
-                <span id="knobStatus" class="ok" aria-live="polite"></span>
+                <span id="btnStatus" class="status"></span>
               </div>
-            </div>
-          </article>
-        </div>
-      </section>
+            </article>
+
+            <article class="card">
+              <h3 class="h3">Adjust Thresholds</h3>
+              <div class="form-grid">
+                <label class="field">
+                  <span>Target</span>
+                  <select id="target">
+                    <option value="temperature">Temperature (TEMP_MAX)</option>
+                    <option value="humidity">Humidity (HUM_MIN)</option>
+                  </select>
+                </label>
+                <label class="field">
+                  <span>Value</span>
+                  <input
+                    id="tval"
+                    type="number"
+                    step="0.1"
+                    placeholder="e.g. 32"
+                  />
+                </label>
+                <div class="row">
+                  <button class="btn" onclick="sendKnob()">
+                    Set Threshold
+                  </button>
+                  <span id="knobStatus" class="status ok"></span>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+      </div>
     </main>
+
+    <footer class="footer">
+      <small class="muted">© Smart Greenhouse</small>
+    </footer>
 
     <script src="/static/manual.js"></script>
   </body>

@@ -19,7 +19,8 @@ def iso_utc_now() -> str:
 
 def publish_emergency(client: MQTTClient) -> None:
     payload = {"pressed": True, "ts": iso_utc_now()}
-    client.publish(TOPIC_EMERGENCY, json.dumps(payload))
+    info = client.publish(TOPIC_EMERGENCY, json.dumps(payload), qos=1)
+    info.wait_for_publish()
     print("[BUTTON] EMERGENCY sent")
 
 

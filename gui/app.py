@@ -50,10 +50,14 @@ def hours_ago(n: int) -> str:
 
 
 def mqtt_publish(topic: str, payload: dict) -> None:
-    """Publish a single message (short-lived client)."""
     client = MQTTClient()
     client.connect(MQTT_HOST, MQTT_PORT, keepalive=60)
-    client.publish(topic, json.dumps(payload))
+
+    client.loop_start()
+    info: MQTTMessageInfo = client.publish(topic, json.dumps(payload), qos=1)
+    info.wait_for_publish()
+    client.loop_stop()
+
     client.disconnect()
 
 
