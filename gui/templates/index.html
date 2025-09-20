@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Smart Greenhouse • Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css" />
+    <meta name="theme-color" content="#1f2937" />
+  </head>
+  <body>
+    <header
+      class="card small"
+      style="
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+      "
+    >
+      <div>
+        <h1 style="margin: 0; font-size: 1.4rem">Smart Greenhouse</h1>
+        <p style="margin: 0; opacity: 0.8; font-size: 0.95rem">
+          Live environment overview
+        </p>
+      </div>
+      <div id="relays" class="card small" style="margin: 0"></div>
+    </header>
+
+    <main style="display: grid; gap: 1rem">
+      <!-- Charts row -->
+      <section
+        style="
+          display: grid;
+          gap: 1rem;
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        "
+      >
+        <article class="card">
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+            "
+          >
+            <h2 style="margin: 0">Temperature &amp; Humidity</h2>
+            <span style="opacity: 0.7; font-size: 0.9rem">last 15 min</span>
+          </div>
+          <canvas
+            id="dhtChart"
+            aria-label="Temperature and Humidity chart"
+            role="img"
+          ></canvas>
+        </article>
+
+        <article class="card">
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+            "
+          >
+            <h2 style="margin: 0">Light</h2>
+            <span style="opacity: 0.7; font-size: 0.9rem">last 15 min</span>
+          </div>
+          <canvas
+            id="lightChart"
+            aria-label="Light (lux) chart"
+            role="img"
+          ></canvas>
+        </article>
+      </section>
+
+      <!-- Alerts -->
+      <section class="card">
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <h2 style="margin: 0">Recent Alerts</h2>
+          <span style="opacity: 0.7; font-size: 0.9rem">last hour</span>
+        </div>
+        <ul id="alertsList" aria-live="polite" style="margin-top: 0.75rem"></ul>
+      </section>
+
+      <section class="card" style="text-align: center">
+        <a
+          href="/manual"
+          style="color: var(--accent); text-decoration: none; font-weight: 600"
+        >
+          Open Manual Data Console →
+        </a>
+      </section>
+    </main>
+
+    <footer style="opacity: 0.8; text-align: center; margin-top: 1rem">
+      <p style="margin: 0.25rem 0">MQTT → Data Manager → MongoDB → Flask GUI</p>
+    </footer>
+
+    <!-- Chart.js + time adapter via CDN (load before main.js) -->
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3"
+    ></script>
+    <script defer src="/static/chart-check.js"></script>
+    <script defer src="/static/main.js"></script>
+  </body>
+</html>

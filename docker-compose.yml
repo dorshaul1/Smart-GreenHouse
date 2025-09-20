@@ -1,0 +1,100 @@
+services:
+  mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: mosquitto
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+    restart: unless-stopped
+
+  mongo:
+    image: mongo:7
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    restart: unless-stopped
+
+  mongo-express:
+    image: mongo-express:1
+    container_name: mongo-express
+    ports:
+      - "8081:8081"
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongo
+    depends_on:
+      - mongo
+    restart: unless-stopped
+
+  data-manager:
+    build: .
+    container_name: data-manager
+    command: python data_manager/manager.py
+    environment:
+      - MQTT_HOST=mosquitto
+      - MQTT_PORT=1883
+      - MONGO_URI=mongodb://mongo:27017
+      - MONGO_DB=greenhouse
+      - TEMP_MAX=35
+      - HUM_MIN=20
+    depends_on:
+      - mosquitto
+      - mongo
+    restart: unless-stopped
+
+  relays:
+    build: .
+    container_name: relays
+    command: python emulators/relays/relay_controller.py
+    environment:
+      - MQTT_HOST=mosquitto
+      - MQTT_PORT=1883
+    depends_on:
+      - mosquitto
+    restart: unless-stopped
+
+  dht-emulator:
+    build: .
+    container_name: dht-emulator
+    command: python emulators/sensors/dht_emulator.py
+    environment:
+      - MQTT_HOST=mosquitto
+      - MQTT_PORT=1883
+    depends_on:
+      - mosquitto
+    restart: unless-stopped
+
+  light-emulator:
+    build: .
+    container_name: light-emulator
+    command: python emulators/sensors/light_emulator.py
+    environment:
+      - MQTT_HOST=mosquitto
+      - MQTT_PORT=1883
+    depends_on:
+      - mosquitto
+    restart: unless-stopped
+
+  gui:
+    build: .
+    container_name: greenhouse-gui
+    command: python gui/app.py
+    environment:
+      - FLASK_PORT=5001
+      - MQTT_HOST=mosquitto
+      - MQTT_PORT=1883
+      - MONGO_URI=mongodb://mongo:27017
+      - MONGO_DB=greenhouse
+    ports:
+      - "5001:5001"
+    depends_on:
+      - mongo
+      - mosquitto
+      - data-manager
+    restart: unless-stopped
+
+volumes:
+  mongo-data:

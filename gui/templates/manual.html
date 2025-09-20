@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Manual Data Console</title>
+    <link rel="stylesheet" href="/static/style.css" />
+    <style>
+      .wrap {
+        display: grid;
+        gap: 1rem;
+      }
+      .grid {
+        display: grid;
+        gap: 12px;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      }
+      .stack {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      label {
+        font-weight: 600;
+        opacity: 0.9;
+      }
+
+      input[type="number"],
+      input[type="text"],
+      select {
+        padding: 10px 12px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        background: rgba(255, 255, 255, 0.05);
+        color: #eef2ff;
+        width: 100%;
+      }
+
+      button {
+        padding: 10px 14px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        background: rgba(110, 168, 254, 0.2);
+        color: #eef2ff;
+        cursor: pointer;
+        font-weight: 700;
+        letter-spacing: 0.2px;
+      }
+      button:hover {
+        filter: brightness(1.08);
+      }
+
+      .ok {
+        color: var(--ok);
+      }
+      .warn {
+        color: var(--warn);
+      }
+      .alarm {
+        color: var(--alarm);
+      }
+      .muted {
+        color: var(--muted);
+      }
+
+      header .head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+      header .head a {
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="card small">
+      <div class="head">
+        <div>
+          <h1 style="margin: 0">Manual Data Console</h1>
+          <p class="muted" style="margin: 0.25rem 0 0">
+            Send test readings & actuator commands
+          </p>
+        </div>
+        <a href="\/">← Back to Dashboard</a>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <!-- Sensors -->
+      <section class="card">
+        <div class="row" style="justify-content: space-between">
+          <h2 style="margin: 0">Send Sensor Readings</h2>
+          <span class="muted">manual publish</span>
+        </div>
+
+        <div class="grid">
+          <!-- DHT -->
+          <article class="card">
+            <h3 style="margin-top: 0">DHT (Temperature &amp; Humidity)</h3>
+            <div class="stack">
+              <div class="field">
+                <label for="temp">Temperature (°C)</label>
+                <input
+                  id="temp"
+                  type="number"
+                  step="0.1"
+                  placeholder="e.g. 33.5"
+                  aria-label="Temperature in Celsius"
+                />
+              </div>
+              <div class="field">
+                <label for="hum">Humidity (%)</label>
+                <input
+                  id="hum"
+                  type="number"
+                  step="0.1"
+                  placeholder="e.g. 24"
+                  aria-label="Humidity percent"
+                />
+              </div>
+              <div class="row">
+                <button onclick="sendDHT()" aria-label="Send DHT reading">
+                  Send DHT
+                </button>
+                <span id="dhtStatus" class="muted" aria-live="polite"></span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Light -->
+          <article class="card">
+            <h3 style="margin-top: 0">Light (Lux)</h3>
+            <div class="stack">
+              <div class="field">
+                <label for="lux">Lux</label>
+                <input
+                  id="lux"
+                  type="number"
+                  step="1"
+                  placeholder="e.g. 400"
+                  aria-label="Light in lux"
+                />
+              </div>
+              <div class="row">
+                <button onclick="sendLight()" aria-label="Send Light reading">
+                  Send Light
+                </button>
+                <span id="lightStatus" class="muted" aria-live="polite"></span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Actuators -->
+      <section class="card">
+        <div class="row" style="justify-content: space-between">
+          <h2 style="margin: 0">Actuators</h2>
+          <span class="muted">controls</span>
+        </div>
+
+        <div class="grid">
+          <!-- Emergency -->
+          <article class="card">
+            <h3 style="margin-top: 0">Emergency Button</h3>
+            <div class="row">
+              <button onclick="sendEmergency()" aria-label="Trigger emergency">
+                Trigger Emergency
+              </button>
+              <span id="btnStatus" class="alarm" aria-live="polite"></span>
+            </div>
+          </article>
+
+          <!-- Knob -->
+          <article class="card">
+            <h3 style="margin-top: 0">Adjust Thresholds (Knob)</h3>
+            <div class="stack">
+              <div class="field">
+                <label for="target">Target</label>
+                <select id="target" aria-label="Threshold target">
+                  <option value="temperature">Temperature (TEMP_MAX)</option>
+                  <option value="humidity">Humidity (HUM_MIN)</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="tval">Value</label>
+                <input
+                  id="tval"
+                  type="number"
+                  step="0.1"
+                  placeholder="e.g. 32"
+                  aria-label="Threshold value"
+                />
+              </div>
+              <div class="row">
+                <button onclick="sendKnob()" aria-label="Set threshold">
+                  Set Threshold
+                </button>
+                <span id="knobStatus" class="ok" aria-live="polite"></span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <script src="/static/manual.js"></script>
+  </body>
+</html>

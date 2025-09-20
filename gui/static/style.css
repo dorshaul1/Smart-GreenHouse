@@ -1,0 +1,122 @@
+:root {
+  --bg: #0b0f19;
+  --card: #12192d;
+  --text: #eef2ff;
+  --muted: #9aa6c9;
+  --accent: #6ea8fe;
+  --ok: #12b886;
+  --warn: #ffd43b;
+  --alarm: #ff6b6b;
+}
+
+/* Reset-lite */
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+  color: var(--text);
+  background:
+    radial-gradient(900px 700px at 70% -10%, #101637 0%, transparent 60%),
+    radial-gradient(900px 700px at 0% 0%, #0f1530 0%, transparent 55%),
+    linear-gradient(180deg, #0b0f19 0%, #0b0f19 100%);
+}
+
+/* Page structure */
+header, main, footer {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+h1 {
+  margin: 0;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  line-height: 1.2;
+}
+
+/* Card */
+.card {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.015)) ,
+    var(--card);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 14px;
+  padding: 14px;
+  margin: 14px 0;
+  box-shadow:
+    0 8px 24px rgba(0,0,0,0.28),
+    inset 0 1px 0 rgba(255,255,255,0.06);
+  backdrop-filter: saturate(120%);
+}
+
+.card.small {
+  padding: 10px;
+  min-width: 260px;
+}
+
+/* Alerts list */
+#alertsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.alert {
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.35;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.04);
+}
+
+.alert.info {
+  background: color-mix(in oklab, #6ea8fe 20%, transparent);
+  border-color: color-mix(in oklab, #6ea8fe 35%, transparent);
+}
+
+.alert.warning {
+  background: color-mix(in oklab, #ffd43b 20%, transparent);
+  border-color: color-mix(in oklab, #ffd43b 35%, transparent);
+}
+
+.alert.alarm {
+  background: color-mix(in oklab, #ff6b6b 20%, transparent);
+  border-color: color-mix(in oklab, #ff6b6b 35%, transparent);
+}
+
+/* Relay chips */
+#relays .chip {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  margin-right: 6px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.08);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.chip.on {
+  background: color-mix(in oklab, var(--ok) 28%, transparent);
+  border-color: color-mix(in oklab, var(--ok) 40%, transparent);
+}
+
+/* Minor text utilities used in templates */
+.muted { color: var(--muted); }
+
+/* Footer spacing */
+footer { opacity: 0.9; }
+footer p { margin: 6px 0 0; }

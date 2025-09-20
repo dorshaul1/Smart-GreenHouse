@@ -1,0 +1,5 @@
+paho-mqtt==2.1.0
+pymongo==4.8.0
+Flask==3.0.3
+python-dotenv==1.0.1
+Flask-Cors==4.0.1
