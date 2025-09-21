@@ -1,4 +1,4 @@
-# 🌱 Smart Greenhouse IOT
+# Smart Greenhouse IOT
 
 A complete **IOT greenhouse system** for real-time monitoring and control.
 
